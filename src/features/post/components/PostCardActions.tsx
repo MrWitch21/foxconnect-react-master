@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useDeletePost } from '../api/deletePost'
 import type { Post } from './postTypes'
 import { useUpdatePost } from '../api/updatePost'
-import { DeletePostDialog } from './dialogs/DeleteDialog'
+import { DeletePostDialog } from './dialogs/DeletePostDialog'
 import { UpdatePostDialog } from './dialogs/UpdatePostDialog'
 
 

@@ -5,9 +5,10 @@ import { apiClient } from '@/utils/api'
 import type { MutationConfig } from '@/utils/query'
 
 import type { Post } from '../components/post/postTypes'
-import { getPostsOptions } from './getPosts'
+import { getPostsOptions } from '../api/getPosts'
 
-const createPostSchema = z.object({
+const updatePostSchema = z.object({
+  id: z.string().nonempty(),
   title: z
     .string()
     .nonempty('Title is required')
@@ -20,18 +21,21 @@ const createPostSchema = z.object({
     .max(1000, { message: 'Body must be less than 1000 characters' }),
 })
 
-type CreatePostSchema = z.infer<typeof createPostSchema>
+type UpdatePostSchema = z.infer<typeof updatePostSchema>
 
-const createPost = async (input: CreatePostSchema): Promise<Post> => {
-  const response = await apiClient.post('/posts', input)
+const updatePost = async (input: UpdatePostSchema): Promise<Post> => {
+  const response = await apiClient.patch(`/posts/${input.id}`, {
+    title: input.title,
+    body: input.body,
+  })
   return response.data
 }
 
-type UseCreatePostOptions = {
-  mutationConfig?: MutationConfig<typeof createPost>
+type UseUpdatePostOptions = {
+  mutationConfig?: MutationConfig<typeof updatePost>
 }
 
-const useCreatePost = ({ mutationConfig }: UseCreatePostOptions = {}) => {
+const useUpdatePost = ({ mutationConfig }: UseUpdatePostOptions = {}) => {
   const queryClient = useQueryClient()
 
   const { onSuccess, ...restConfig } = mutationConfig || {}
@@ -45,9 +49,9 @@ const useCreatePost = ({ mutationConfig }: UseCreatePostOptions = {}) => {
       onSuccess?.(data, ...args)
     },
     ...restConfig,
-    mutationFn: createPost,
+    mutationFn: updatePost,
   })
 }
 
-export type { CreatePostSchema }
-export { createPostSchema, createPost, useCreatePost }
+export type { UpdatePostSchema }
+export { updatePostSchema, updatePost, useUpdatePost }

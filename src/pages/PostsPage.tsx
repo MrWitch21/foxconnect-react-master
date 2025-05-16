@@ -1,7 +1,7 @@
 import { useCreatePost } from '@/features/post/api/createPost'
 import { usePosts } from '@/features/post/api/getPosts'
-import { CreatePostDialog } from '@/features/post/components/CreatePostDialog'
-import { PostList } from '@/features/post/components/PostList'
+import { CreatePostDialog } from '@/features/post/components/post/dialogs/CreatePostDialog'
+import { PostList } from '@/features/post/components/post/PostList'
 
 const PostsPage = () => {
   const { data: response, isFetching } = usePosts()

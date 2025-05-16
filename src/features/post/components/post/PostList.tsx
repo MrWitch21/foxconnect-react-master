@@ -1,7 +1,8 @@
 import { LoaderCircle } from 'lucide-react'
-
-import type { Post } from '../postTypes'
+import type { Post } from './postTypes'
 import { PostCard } from './PostCard'
+
+
 
 type PostListProps = {
   posts: Post[]

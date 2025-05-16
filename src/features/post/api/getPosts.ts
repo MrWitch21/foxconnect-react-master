@@ -3,7 +3,7 @@ import { queryOptions, useQuery } from '@tanstack/react-query'
 import { apiClient, type QueryResponse } from '@/utils/api'
 import type { QueryConfig } from '@/utils/query'
 
-import type { Post } from '../postTypes'
+import type { Post } from '../components/post/postTypes'
 
 const getPosts = async (): Promise<QueryResponse<Post[]>> => {
   const response = await apiClient.get('/posts')

@@ -1,6 +1,6 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-import type { Post } from '../postTypes'
+import type { Post } from './postTypes'
 import { PostCardActions } from './PostCardActions'
 
 type PostCardProps = {
@@ -13,7 +13,7 @@ const PostCard = ({ post }: PostCardProps) => {
       <CardHeader>
         <CardTitle>{post.title}</CardTitle>
         <CardAction>
-          <PostCardActions postId={post.id} />
+          <PostCardActions post={post} />
         </CardAction>
         <CardDescription>
           {post.createdBy} - {new Date(post.createdAt).toLocaleString()}

@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { apiClient } from '@/utils/api'
 import type { MutationConfig } from '@/utils/query'
 
-import type { Post } from '../components/post/postTypes'
+import type { Post } from '../components/postTypes'
 import { getPostsOptions } from '../api/getPosts'
 
 const updatePostSchema = z.object({

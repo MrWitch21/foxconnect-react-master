@@ -4,24 +4,25 @@ import { MoreVertical, Pencil, Trash2 } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 
-import { useDeletePost } from '../../api/deletePost'
+import { useDeletePost } from '../api/deletePost'
 import type { Post } from './postTypes'
-import { useUpdatePost } from '../../api/updatePost'
-import { UpdatePostDialog } from './dialogs/UpdatePostDialog'
+import { useUpdatePost } from '../api/updatePost'
 import { DeletePostDialog } from './dialogs/DeleteDialog'
+import { UpdatePostDialog } from './dialogs/UpdatePostDialog'
+
 
 type PostCardActionsProps = {
   post: Post
 }
 
 function PostCardActions({ post }: PostCardActionsProps) {
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [isEditModalOpen, setEditModalOpen] = useState(false)
 
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false)
 
   const updateMutation = useUpdatePost({
     mutationConfig: {
-      onSuccess: () => setEditModalOpen(false),
+      onSuccess: () => setEditDialogOpen(false),
     },
   })
   const handleUpdate = (data: { id: string; title: string; body: string }) => {
@@ -30,7 +31,7 @@ function PostCardActions({ post }: PostCardActionsProps) {
 
   const deleteMutation = useDeletePost({
     mutationConfig: {
-      onSuccess: () => setDeleteModalOpen(false),
+      onSuccess: () => setDeleteDialogOpen(false),
     },
   })
   const handleDelete = () => {
@@ -46,13 +47,13 @@ function PostCardActions({ post }: PostCardActionsProps) {
           body: post.body,
         }}
         handleSubmit={handleUpdate}
-        open={isEditModalOpen}
-        onOpenChange={setEditModalOpen}
+        open={isEditDialogOpen}
+        onOpenChange={setEditDialogOpen}
       />
 
       <DeletePostDialog
-        open={isDeleteModalOpen}
-        onOpenChange={setDeleteModalOpen}
+        open={isDeleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
         onConfirm={handleDelete}
         isLoading={deleteMutation.isPending}
       />
@@ -64,11 +65,11 @@ function PostCardActions({ post }: PostCardActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setEditModalOpen(true)}>
+          <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
             <Pencil className="mr-2 h-4 w-4" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteModalOpen(true)}>
+          <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
             <Trash2 className="mr-2 h-4 w-4 text-red-500" />
             Delete
           </DropdownMenuItem>

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, Plus } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
@@ -10,38 +11,51 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle} from '@/components/ui/dialog'
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { type CreatePostSchema, createPostSchema } from '../../api/createPost'
 
-import { updatePostSchema, type UpdatePostSchema } from '@/features/post/api/updatePost'
 
-type UpdatePostDialogProps = {
-  defaultValues: UpdatePostSchema
-  handleSubmit: (formData: UpdatePostSchema) => Promise<unknown> | unknown
-  open: boolean
-  onOpenChange: (open: boolean) => void
+const DEFAULT_VALUES: CreatePostSchema = {
+  title: '',
+  body: '',
 }
 
-const UpdatePostDialog = ({ defaultValues, handleSubmit, open, onOpenChange }: UpdatePostDialogProps) => {
-  const form = useForm<UpdatePostSchema>({
-    resolver: zodResolver(updatePostSchema),
-    defaultValues,
+type CreatePostDialogProps = {
+  handleSubmit: (formData: CreatePostSchema) => Promise<unknown> | unknown
+}
+
+const CreatePostDialog = ({ handleSubmit }: CreatePostDialogProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const form = useForm<CreatePostSchema>({
+    resolver: zodResolver(createPostSchema),
+    defaultValues: DEFAULT_VALUES,
   })
 
-  const handleFormSubmit = async (formData: UpdatePostSchema) => {
+  const handleFormSubmit = async (formData: CreatePostSchema) => {
     await handleSubmit(formData)
-    onOpenChange(false)
+    setIsOpen(false)
+    form.reset(DEFAULT_VALUES)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus /> New post
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <DialogHeader>
-            <DialogTitle>Update post</DialogTitle>
-            <DialogDescription>Edit your thoughts and save the changes.</DialogDescription>
+            <DialogTitle>Create new post</DialogTitle>
+            <DialogDescription>
+              Write a quick post and share what's on your mind. No rules, no pressure — just you and your thoughts.
+            </DialogDescription>
           </DialogHeader>
           <form className="space-y-4" onSubmit={form.handleSubmit(handleFormSubmit)}>
             <FormField
@@ -51,7 +65,7 @@ const UpdatePostDialog = ({ defaultValues, handleSubmit, open, onOpenChange }: U
                 <FormItem>
                   <FormLabel>Title:</FormLabel>
                   <FormControl>
-                    <Input placeholder="Update title..." {...field} />
+                    <Input placeholder="Give it a short title..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -64,7 +78,7 @@ const UpdatePostDialog = ({ defaultValues, handleSubmit, open, onOpenChange }: U
                 <FormItem>
                   <FormLabel>Body:</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Edit your post..." {...field} />
+                    <Textarea placeholder="Share a thought, a vibe, anything..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -73,11 +87,11 @@ const UpdatePostDialog = ({ defaultValues, handleSubmit, open, onOpenChange }: U
             <DialogFooter>
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
-                  Cancel
+                  Close
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />} Update post
+                {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />} Create post
               </Button>
             </DialogFooter>
           </form>
@@ -87,4 +101,4 @@ const UpdatePostDialog = ({ defaultValues, handleSubmit, open, onOpenChange }: U
   )
 }
 
-export { UpdatePostDialog }
+export { CreatePostDialog }

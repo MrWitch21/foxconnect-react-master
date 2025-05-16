@@ -68,6 +68,6 @@ Consider how the editing UI will work smoothly and intuitively.
 
 <hr>
 
-🕒 Time spent on this project: **~ 3 hours**
+🕒 Time spent on this project: **(approximately) 3 hours**
 
 ### 🍀 We wish you good luck, hope you'll enjoy the exercise. 🤞
